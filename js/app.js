@@ -3,9 +3,9 @@ test
  * Create a list that holds all of your cards
  */
 
- let cardDeck = document.getElementById("cardDeck");
- cardDeck.style.display = "auto";
- cardDeck.addEventListener("click",function(event) {cardDeck.style.display = "none";});
+ //let cardDeck = document.getElementById("cardDeck");
+ //cardDeck.style.display = "auto";
+ //cardDeck.addEventListener("click",function(event) {cardDeck.style.display = "none";});
 
 /*
  * Display the cards on the page
@@ -40,3 +40,30 @@ function shuffle(array) {
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+ let cards = document.querySelectorAll('.card');
+ let selectedCards = [];
+
+ cards.forEach(function(card) {
+     card.addEventListener('click', function(ev) {
+        //console.log(ev);
+        //console.log(ev.target.innerHTML);
+        selectedCards.push(card);
+        card.classList.add('open','show');
+        //console.log(selectedCards.length);
+        if (selectedCards.length == 2) {
+            setTimeout(function() {
+                resetCards();
+            }, 1000);
+        }
+     })
+ }
+)
+
+function resetCards() {
+    selectedCards.forEach(function (card) {
+        card.classList.remove('open', 'show');
+    });
+    selectedCards = [];
+}
+ 
