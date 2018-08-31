@@ -41,24 +41,50 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
+ let cardList = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-plane-o',
+                'fa-anchor','fa-anchor', 'fa-bolt','fa-bolt', 'fa-cube', 'fa-cube',
+                'fa-leaf', 'fa-leaf', 'fa-bicycle', 'fa-bicycle', 'fa-bomb', 'fa-bomb'];
+
+ buildCards(cardList);
+
  let cards = document.querySelectorAll('.card');
  let selectedCards = [];
+ 
+
 
  cards.forEach(function(card) {
      card.addEventListener('click', function(ev) {
         //console.log(ev);
         //console.log(ev.target.innerHTML);
-        selectedCards.push(card);
-        card.classList.add('open','show');
-        //console.log(selectedCards.length);
-        if (selectedCards.length == 2) {
-            setTimeout(function() {
-                resetCards();
-            }, 1000);
+        if ( ! card.classList.contains('open') && ! card.classList.contains('match')) {
+            selectedCards.push(card);
+            card.classList.add('open','show');
+            //console.log(selectedCards.length);
+            if (selectedCards.length == 2) {
+                setTimeout(function() {
+                    resetCards();
+                }, 1000);
+            }
         }
      })
  }
 )
+
+function buildCards(cardList) {
+    for (const card of cardList) {
+        let cardHTML = generateCard(card);
+        let deck = document.getElementById('cardDeck');
+        deck.innerHTML = deck.innerHTML + cardHTML;
+        //console.log(deck);
+    }
+}
+
+function generateCard(cardClass) {
+    // create card html with supplied card class
+    return `<li class="card">
+    <i class="fa ${cardClass}"></i>
+    </li>`;
+}
 
 function resetCards() {
     selectedCards.forEach(function (card) {
