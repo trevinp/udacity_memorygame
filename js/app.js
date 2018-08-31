@@ -3,6 +3,9 @@ test
  * Create a list that holds all of your cards
  */
 
+ let cardDeck = document.getElementById("cardDeck");
+ cardDeck.style.display = "auto";
+ cardDeck.addEventListener("click",function(event) {cardDeck.style.display = "none";});
 
 /*
  * Display the cards on the page
