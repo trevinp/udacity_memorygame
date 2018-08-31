@@ -41,55 +41,57 @@ function shuffle(array) {
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
 
- let cardList = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-plane-o',
+ // The master list of cards the user can play with on the board
+let cardList = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-plane-o',
                 'fa-anchor','fa-anchor', 'fa-bolt','fa-bolt', 'fa-cube', 'fa-cube',
                 'fa-leaf', 'fa-leaf', 'fa-bicycle', 'fa-bicycle', 'fa-bomb', 'fa-bomb'];
 
- buildCards(cardList);
+// List to hold which cards have been selected by user
+let selectedCards = [];
 
- let cards = document.querySelectorAll('.card');
- let selectedCards = [];
- 
+buildCards(cardList);
+addClickEventToCards();
 
+function addClickEventToCards() {
+    // Adds click event to cards to either show or flip the card back over
+    let cards = document.querySelectorAll('.card');
 
- cards.forEach(function(card) {
-     card.addEventListener('click', function(ev) {
-        //console.log(ev);
-        //console.log(ev.target.innerHTML);
-        if ( ! card.classList.contains('open') && ! card.classList.contains('match')) {
-            selectedCards.push(card);
-            card.classList.add('open','show');
-            //console.log(selectedCards.length);
-            if (selectedCards.length == 2) {
-                setTimeout(function() {
-                    resetCards();
-                }, 1000);
+    cards.forEach(function (card) {
+        card.addEventListener('click', function (ev) {
+            if (!card.classList.contains('open') && !card.classList.contains('match')) {
+                selectedCards.push(card);
+                card.classList.add('open', 'show');
+                if (selectedCards.length == 2) {
+                    setTimeout(function () {
+                        resetCards();
+                    }, 1000);
+                }
             }
-        }
-     })
- }
-)
-
-function buildCards(cardList) {
-    for (const card of cardList) {
-        let cardHTML = generateCard(card);
-        let deck = document.getElementById('cardDeck');
-        deck.innerHTML = deck.innerHTML + cardHTML;
-        //console.log(deck);
-    }
+        });
+    });
 }
 
-function generateCard(cardClass) {
-    // create card html with supplied card class
-    return `<li class="card">
-    <i class="fa ${cardClass}"></i>
-    </li>`;
+function buildCards(cardList) {
+    // Dynamically build card deck and add to the page
+
+    let cardDeckFragment = new DocumentFragment();
+    let deck = document.getElementById('cardDeck');
+    cardDeckFragment.innerHTML = deck.innerHTML;
+
+    for (const card of cardList) {
+        let cardHTML = `<li class="card">
+        <i class="fa ${card}"></i>
+        </li>`;
+        cardDeckFragment.innerHTML = cardDeckFragment.innerHTML + cardHTML;
+    }
+    deck.innerHTML = deck.innerHTML + cardDeckFragment.innerHTML;
 }
 
 function resetCards() {
-    selectedCards.forEach(function (card) {
+    // Flip any selected cards back over
+    for (const card of selectedCards) {
         card.classList.remove('open', 'show');
-    });
+    }
     selectedCards = [];
 }
  
