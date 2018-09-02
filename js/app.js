@@ -44,7 +44,11 @@ let initialCards = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-pl
 // List to hold which cards have been selected by user
 let selectedCards = [];
 let numMoves = 0;
+let numStars = 4;
+let timerInstance = new Timer();
+let totalNumCards = initialCards.length;
 let numMovesElement = document.getElementById('moveCounter');
+let span = document.getElementsByClassName("close")[0];
 
 initalizeCardGame();
 
@@ -53,14 +57,37 @@ function initalizeCardGame() {
     addClickEventToCards();
     addRestartEvent();
     numMovesElement.innerText = numMoves;
+    timerInstance.start();
+}
+
+function addStar(star) {
+    let starAdd = document.getElementById(star);
+    starAdd.style.display = 'block';
+}
+
+function hideStar(star) {
+    let starHide = document.getElementById(star);
+    starHide.style.display = 'none';
 }
 
 function addRestartEvent() {
     // Restart funcitonality- remove cards and reinitialize
     let restart = document.getElementById('restart');
     restart.addEventListener('click', function () {
+        restartGame();
+    });
+}
+
+function restartGame() {
+    // console.log('restarted after ' + timerInstance.getTimeValues().seconds + " seconds");
+    let restartConfirm = window.confirm(
+        `You are restarting the game after ${numMoves} moves and used ${timerInstance.getTimeValues().seconds} seconds.\nClick OK to CONFIRM or Cancel to dismiss.`);
+    if (restartConfirm === true) {
         selectedCards = [];
         numMoves = 0;
+        timerInstance.reset();
+        timerInstance.start();
+        numMovesElement.innerText = numMoves;
         let deck = document.getElementById('cardDeck');
         let children = deck.querySelectorAll('.card');
         for (const child of children) {
@@ -68,7 +95,11 @@ function addRestartEvent() {
         }
         buildCards(shuffle(initialCards));
         addClickEventToCards();
-    });
+        numStars = 3;
+        for (let i = 1; i < numStars + 1; i++) {
+            addStar('star' + i);
+        }
+    }
 }
 
 function addClickEventToCards() {
@@ -94,14 +125,28 @@ function checkForMatch() {
         if (classCardName1 === classCardName2) {
             // It matches
             cardsMatch();
+            // See if user has finished all cards and give score if so
+            let cards = document.querySelectorAll('.match');
+            if (cards.length == totalNumCards) {
+                let result = window.confirm(
+                    `You completed the game in ${numMoves} moves and took ${timerInstance.getTimeValues().seconds}! \nClick OK to play again or Cancel to stop.`);
+                if (result === true) {
+                    restartGame();
+                }
+            }
         }
         else {
             // It does not match
             setTimeout(function () {
                 resetCards();
             }, 1000);
-            numMoves = numMoves + 1;
+            numMoves++;
             numMovesElement.innerText = numMoves;
+            // every 4 moves remove a star until they are all gone
+            if (numMoves % 4 === 0 && numStars > 1) {
+                hideStar('star' + numStars);
+                numStars--;
+            }
         }
     }
 }

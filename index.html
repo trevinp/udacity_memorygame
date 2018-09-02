@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Matching Game</title>
-    <meta name="description" content="">
+    <title>Card Matching Game</title>
+    <meta name="card matching game for udacity project" content="">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
     <link rel="stylesheet" href="css/app.css">
@@ -17,21 +17,22 @@
 
         <section class="score-panel">
         	<ul class="stars">
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
-        		<li><i class="fa fa-star"></i></li>
+        		<li><i id="star1" class="fa fa-star"></i></li>
+        		<li><i id="star2" class="fa fa-star"></i></li>
+                <li><i id="star3" class="fa fa-star"></i></li>
+                <li><i id="star4" class="fa fa-star"></i></li>
         	</ul>
 
         	<span id="moveCounter" class="moves">3</span> Moves
             <div class="restart">
-        		<i id="restart" class="fa fa-repeat"></i>
+        		<i id="restart" class="fa fa-repeat">  Reset</i>
         	</div>
         </section>
 
         <ul id="cardDeck" class="deck">
         </ul>
     </div>
-
+    <script src="js/easytimer.min.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
