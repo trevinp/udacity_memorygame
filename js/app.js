@@ -24,6 +24,21 @@ function shuffle(array) {
     return array;
 }
 
+let modal = document.querySelector(".modal");
+let closeButton = document.querySelector(".close-button");
+
+function toggleModal() {
+    modal.classList.toggle("show-modal");
+}
+
+function windowOnClick(event) {
+    if (event.target === modal) {
+        toggleModal();
+    }
+}
+
+closeButton.addEventListener("click", toggleModal);
+window.addEventListener("click", windowOnClick);
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -45,10 +60,11 @@ let initialCards = ['fa-diamond', 'fa-diamond', 'fa-paper-plane-o', 'fa-paper-pl
 let selectedCards = [];
 let numMoves = 0;
 let numStars = 4;
+// Timer functionality is from https://github.com/albert-gonzalez/easytimer.js
 let timerInstance = new Timer();
 let totalNumCards = initialCards.length;
 let numMovesElement = document.getElementById('moveCounter');
-let span = document.getElementsByClassName("close")[0];
+let span = document.getElementsByClassName('close')[0];
 
 initalizeCardGame();
 
@@ -57,6 +73,9 @@ function initalizeCardGame() {
     addClickEventToCards();
     addRestartEvent();
     numMovesElement.innerText = numMoves;
+    timerInstance.addEventListener('secondsUpdated', function (e) {
+        document.getElementById('elapsedTime').textContent = 'Elapsed seconds:  ' + timerInstance.getTimeValues().seconds;
+    });
     timerInstance.start();
 }
 
@@ -79,7 +98,6 @@ function addRestartEvent() {
 }
 
 function restartGame() {
-    // console.log('restarted after ' + timerInstance.getTimeValues().seconds + " seconds");
     let restartConfirm = window.confirm(
         `You are restarting the game after ${numMoves} moves and used ${timerInstance.getTimeValues().seconds} seconds.\nClick OK to CONFIRM or Cancel to dismiss.`);
     if (restartConfirm === true) {
@@ -95,10 +113,14 @@ function restartGame() {
         }
         buildCards(shuffle(initialCards));
         addClickEventToCards();
-        numStars = 3;
-        for (let i = 1; i < numStars + 1; i++) {
-            addStar('star' + i);
-        }
+        addStars();
+    }
+}
+
+function addStars() {
+    numStars = 4;
+    for (let i = 1; i <= numStars; i++) {
+        addStar('star' + i);
     }
 }
 
@@ -125,14 +147,15 @@ function checkForMatch() {
         if (classCardName1 === classCardName2) {
             // It matches
             cardsMatch();
+            numMoves++;
+            numMovesElement.innerText = numMoves;
             // See if user has finished all cards and give score if so
             let cards = document.querySelectorAll('.match');
             if (cards.length == totalNumCards) {
-                let result = window.confirm(
-                    `You completed the game in ${numMoves} moves and took ${timerInstance.getTimeValues().seconds}! \nClick OK to play again or Cancel to stop.`);
-                if (result === true) {
-                    restartGame();
-                }
+                let scoreInfo = document.getElementById('scoreText');
+                scoreInfo.textContent = `You completed the game in ${numMoves} moves and took ${timerInstance.getTimeValues().seconds} seconds!`;
+                toggleModal();
+                timerInstance.pause();
             }
         }
         else {

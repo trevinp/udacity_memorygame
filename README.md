@@ -13,5 +13,5 @@ When the user completes the game they are given the number of total moves and th
 
 ## Dependencies
 
-Starter code is from Udacity at https://github.com/udacity/fend-project-memory-game
+Starter code is from Udacity at https://github.com/udacity/fend-project-memory-game \n
 Timer is from easytimer.js at https://github.com/albert-gonzalez/easytimer.js 
