@@ -53,7 +53,7 @@ function initalizeCardGame() {
     addClickEventToCards();
     addRestartEvent();
     numMovesElement.innerText = numMoves;
-    timerInstance.addEventListener('secondsUpdated', function (e) {
+    timerInstance.addEventListener('secondsUpdated', e => {
         document.getElementById('elapsedTime').textContent = 'Elapsed seconds:  ' + timerInstance.getTimeValues().seconds;
     });
     timerInstance.start();
@@ -109,7 +109,7 @@ function addClickEventToCards() {
     let cards = document.querySelectorAll('.card');
 
     cards.forEach(function (card) {
-        card.addEventListener('click', function () {
+        card.addEventListener('click', event => {
             if (!card.classList.contains('open') && !card.classList.contains('match')) {
                 selectedCards.push(card);
                 card.classList.add('open', 'show');
