@@ -72,7 +72,13 @@ function hideStar(star) {
 function addRestartEvent() {
     // Restart funcitonality- remove cards and reinitialize
     let restart = document.getElementById('restart');
-    restart.addEventListener('click', function () {
+    restart.addEventListener('click', e=> {
+        restartGame();
+    });
+
+    restart = document.getElementById('restartBtn');
+    restart.addEventListener('click', e=> {
+        toggleModal();
         restartGame();
     });
 }
@@ -126,9 +132,12 @@ function checkForMatch() {
         let classCardName2 = selectedCards[1].firstElementChild.classList[1];
         if (classCardName1 === classCardName2) {
             // It matches
+            selectedCards[0].firstElementChild.classList.add('animated', 'tada');
+            selectedCards[1].firstElementChild.classList.add('animated', 'tada');
             cardsMatch();
             numMoves++;
             numMovesElement.innerText = numMoves;
+
             // See if user has finished all cards and give score if so
             let cards = document.querySelectorAll('.match');
             if (cards.length == totalNumCards) {
